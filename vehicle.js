@@ -184,6 +184,9 @@ class Vehicle {
   flee(target) {
     // recopier code de flee de l'exemple précédent
   }
+  flee(target, distanceDeDetection = Infinity) {
+    return this.seek(target.pos, distanceDeDetection).mult(-1);
+  }
 
   seek(target, arrival = false, d=0) {
     let valueDesiredSpeed = this.maxSpeed;
