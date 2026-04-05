@@ -115,12 +115,38 @@ Le serpent évolue à travers **8 stades** définis dans `SNAKE_STAGES`. À chaq
 ---
 
 ### Comportements combinés — `SnakeWanderPlus.behave()`
-Ordre de priorité :
-1. **PANIC** (perte rapide d'anneaux) — fuite élargie × 2
-2. **FLEE** (grand serpent détecté) — fuite × 1,5
-3. **CHASE** (petit serpent détecté) — seek agressif
-4. **FOOD** (nourriture à portée) — seek vers la nourriture
-5. **WANDER** (rien à portée) — errance libre
+
+Chaque frame, le serpent IA évalue la situation et choisit **un seul comportement** selon un ordre de priorité strict. Le rayon de détection est de 200 px par défaut (réglable via slider en mode debug).
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Chaque frame, le serpent évalue dans cet ordre :           │
+│                                                             │
+│  1. PANIC  ──► perte soudaine de segments ?                 │
+│       OUI → fuite à vitesse ×2, rayon élargi ×2            │
+│       NON ↓                                                 │
+│                                                             │
+│  2. FLEE   ──► serpent PLUS GRAND dans le rayon ?           │
+│       OUI → s'éloigner à vitesse ×1.5                       │
+│       NON ↓                                                 │
+│                                                             │
+│  3. CHASE  ──► serpent PLUS PETIT dans le rayon ?           │
+│       OUI → foncer dessus (seek sans freinage)              │
+│       NON ↓                                                 │
+│                                                             │
+│  4. FOOD   ──► nourriture dans le rayon ?                   │
+│       OUI → se diriger vers la plus proche                  │
+│       NON ↓                                                 │
+│                                                             │
+│  5. WANDER ──► rien à portée → errance aléatoire            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Pourquoi cette priorité ?**
+- La **survie prime** sur la chasse (fuir > chasser). Un serpent ne risque pas sa vie pour de la nourriture.
+- La **panique** (perte rapide d'anneaux sous laser) déclenche une fuite immédiate même si aucune menace directe n'est visible — instinct de survie.
+- **Chasser un serpent** est prioritaire sur la nourriture : une proie apporte beaucoup plus de croissance (gain ×25 % des segments de la cible).
+- **Wander** est le comportement par défaut : le serpent n'est jamais immobile, il explore continuellement.
 
 ---
 
