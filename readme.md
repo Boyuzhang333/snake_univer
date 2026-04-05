@@ -107,10 +107,47 @@ Le serpent évolue à travers **8 stades** définis dans `SNAKE_STAGES`. À chaq
 | 6       | 36 |  80 | 4.0 | 0.12 | Étoile |
 | 7 (max) | 44 | 100 | 4.0 | 0.08 | Cercle + anneau |
 
-**Règle de croissance :**
-- Manger une nourriture → +1 anneau
-- Manger un serpent → `floor(0.25 × (anneaux + stade × max_anneaux))` anneaux (rendement 25 %)
-- Quand le max d'anneaux du stade est atteint → passage au stade suivant (rayon et vitesse mis à jour)
+**Règles de croissance et de dégâts :**
+
+#### 🍎 Manger de la nourriture (météorite)
+Chaque nourriture mangée ajoute simplement **+1 anneau**. Simple et prévisible.
+
+#### 🐍 Manger un autre serpent
+Le gain est calculé d'après la taille de la **proie** avec un rendement de 25 % (comme dans la nature) :
+
+```
+gain = floor( 0.25 × (anneaux_proie + stade_proie × max_anneaux_stade_proie) )
+```
+
+Exemple — manger un serpent stade 3 avec 30 anneaux (max = 44) :
+```
+gain = floor( 0.25 × (30 + 3 × 44) ) = floor( 0.25 × 162 ) = 40 anneaux
+```
+
+> Plus la proie est grande, plus le gain est important. Manger un serpent vaut **bien plus** que manger de la nourriture.
+
+#### ⚡ Dégâts reçus (laser de vaisseau)
+
+Les grands serpents résistent mieux aux lasers grâce à une formule inversement proportionnelle au stade :
+
+```
+dégâts = max( 1, floor( (8 - stade) / 2 ) )
+```
+
+| Stade | Dégâts (anneaux perdus) |
+|:-----:|:-----------------------:|
+| 0 (min) | 4 anneaux |
+| 1       | 3 anneaux |
+| 2       | 3 anneaux |
+| 3       | 2 anneaux |
+| 4       | 2 anneaux |
+| 5       | 1 anneau  |
+| 6       | 1 anneau  |
+| 7 (max) | 1 anneau  |
+
+> Un petit serpent au stade 0 perd 4 anneaux par laser — potentiellement fatal. Un grand serpent au stade 7 n'en perd qu'1 — très résistant. Cela reflète l'idée qu'une grande masse corporelle absorbe mieux les dommages.
+
+Si la perte d'anneaux est ≥ 2 en un seul coup → **état de panique** déclenché (~1,5 s de fuite à vitesse doublée).
 
 ---
 
