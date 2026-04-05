@@ -229,7 +229,7 @@ La formule initiale de dégâts (25 % des segments) tuait trop vite les petits s
 
 ## 🎬 Vidéo de démonstration
 
-> *(lien YouTube à ajouter)*
+> [*(lien YouTube à ajouter)*](https://youtu.be/6Dn1o-NFzTc?si=rxBMkeZMES6Ll-oR)
 
 ---
 
